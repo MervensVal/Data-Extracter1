@@ -1,17 +1,12 @@
-#Use OOP
 #On Execution:
 
 #1
-#Pull data from the database
-#Create a folder if it does not exist
-#Create and Save the data to Excel/CSV file
-#Add success/fail log data to database, console, and text file
-
+#Pull data from Excel/CSV file & Add data to database table Employee
+#Add success/fail log data to database table Log_Employee, console, and text file
 
 #2
-#Pull log data from file if it exists else from database
-
+#Pull data from database perform data analytics & Add data to Excel/CSV File
+#Add success/fail log data to database table Log_Employee, console, and text file
 
 #3
-#Pull data from excel
-#Print Average salary, Min Age, Max Age, Count Females & save to DB with timestamp
+#Perform data analytics from file
