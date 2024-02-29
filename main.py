@@ -1,17 +1,14 @@
-#Use OOP
-#On Execution:
+from datetime import date
+import db
+import file_work
+import sys
 
-#1
-#Pull data from the database view or SP
-#Create a folder if it does not exist
-#Create and Save the data to Excel/CSV file
-#Add success/fail log data to database using SP, print in console, and save to csv file
-
-
-#2
-#Pull log data from file if it exists else pull from database
-
-
-#3
-#Pull data from excel/csv file
-#Do data analysis save to DB with timestamp
+try:
+    print('Program Started')
+    db.save_Employee_Data()
+    db.Get_Statistics_DB()
+    file_work.Get_Statistics()
+    print('Program Finished')
+except Exception as e:
+    print('Program terminated')
+    print(e)

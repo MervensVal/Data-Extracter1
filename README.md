@@ -1,17 +1,9 @@
 #On Execution:
+#create EmployeeDB if it does not exist & insert data from CSV File to DB
+#save success/fail log data to database, print in console, and save to text file
+#pull employee data from DB and do analysis. Save in report file _FromDB
+#pull employee data from csv file and do analysis. Save in report file _FromCSV
 
-#1
-#Pull data from the database view or SP
-#Create a folder if it does not exist
-#Create and Save the data to Excel/CSV file
-#Add success/fail log data to database using SP, print in console, and save to csv file
+#A database driver is a software component that allows applications to interact with a specific DBMS (Database Management System). It acts as a bridge between an application and a database, making communication and data exchange standardized and easier.
 
-
-#2
-#Pull log data from file if it exists else pull from database
-
-
-#3
-#Pull data from excel/csv file
-#Do data analysis save to DB with timestamp
-
+#pyodbc is a Python open-source module that simplifies access to ODBC databases such as Oracle, MySQL, PostgreSQL, SQL Server, etc.
