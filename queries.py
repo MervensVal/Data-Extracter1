@@ -63,3 +63,60 @@ select Count(EmployeeID) as Number_Of_Employees, Avg(salary) as Average_Salary,
 Max(Salary) as Highest_Salary, Min(Salary) as Lowest_Salary, 
 State from Employee group by State order by State asc
 '''
+
+createInsertCountry = '''
+if((select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = 'dbo'and TABLE_NAME = 'Country') > 0)
+	begin 
+		print 'table exists already'
+	end
+else 
+	begin
+		print 'creating table Country'
+		Use Company
+		create table Country(
+		CountryID int identity(1000,1) primary key not null,
+		CountryName varchar(100) not null,
+		YearlyRevenue bigint)
+		insert into Country
+		values('United States of America',70000000),
+		('Canada',500000),
+		('Mexico',600000),
+		('Brazil',810000),
+		('Peru',970000),
+		('Chile',784000),
+		('Austria',7500000),
+		('Hungary',900000),
+		('Ghana',8400000),
+		('Senegal',875000),
+		('Mali',74000),
+		('Japan',780090),
+		('India',7810000)
+	end
+
+'''
+
+createTableCountryInfo = '''
+if((select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = 'dbo'and TABLE_NAME = 'CountryInfo') > 0)
+	begin 
+		print 'table exists already'
+	end
+else 
+	begin
+		print 'creating table CountryInfo'
+		Use Company
+		create table CountryInfo(
+		CountryInfoID int identity(1000,1) primary key not null,
+		CountryName varchar(50),
+		Capital varchar(50),
+		Region varchar(50),
+		Subregion varchar(50),
+		Landlocked varchar(10),
+		Currency varchar(150),
+		)
+	end
+'''
+
+insertCountryInfo = '''
+insert into CountryInfo
+values(?,?,?,?,?,?)
+'''

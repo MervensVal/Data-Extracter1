@@ -59,5 +59,6 @@ else:
             cursor.close()
             print('Report1 Created')
             fw.Save_Log_To_File('Success','Report1 Created',now)            
-
-
+    
+    def InsertCountryInfo(CountryName,Capital,Region,Subregion,Landlocked,Currency):
+        print('Inserted data into CountryInfo table')
