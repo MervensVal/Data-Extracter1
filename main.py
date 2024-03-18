@@ -10,6 +10,7 @@ try:
     db.save_Employee_Data()
     db.Get_Statistics_DB()
     file_work.Get_Statistics()
+    db.InsertCountryInfo()
     print('Program Finished')
 except Exception as e:
     print('Program terminated')

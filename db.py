@@ -5,6 +5,7 @@ import csv
 import file_work as fw
 import secret
 from datetime import date
+import request_work as rw
 
 DRIVER = 'SQL SERVER'
 SERVER_NAME = '(local)'
@@ -60,5 +61,27 @@ else:
             print('Report1 Created')
             fw.Save_Log_To_File('Success','Report1 Created',now)            
     
-    def InsertCountryInfo(CountryName,Capital,Region,Subregion,Landlocked,Currency):
-        print('Inserted data into CountryInfo table')
+    def InsertCountryInfo():
+        cursor = conn.cursor()
+        cursor.execute(q.createTableCountryInfo)
+        query =  'select CountryName from Country order by CountryName asc'
+        cursor.execute(query)
+        result = cursor.fetchall()
+        for res in result:  
+            country = str(res).replace("('","").replace("',)","")
+            response = rw.getCountryInfo(country)     
+            data = response.json()
+            capital = (str(data[0]['capital']).replace("['","")).replace("']","")
+            region = (str(data[0]['region']).replace("['","")).replace("']","")
+            subregion = (str(data[0]['subregion']).replace("['","")).replace("']","")
+            landlocked = (str(data[0]['landlocked']).replace("['","")).replace("']","")
+            currency = (str(data[0]['currencies']))#.replace("{","").replace(":","").replace("'","").replace(",","").replace("}","")
+            list = [country,capital,region,subregion,landlocked,currency]
+            cursor.execute('insert into CountryInfo values (?,?,?,?,?,?)',(list))
+            cursor.commit()
+        status = 'Success'
+        message = 'Latest country data inserted'
+        cursor.execute("insert into LogData values (?,?,GETDATE())",status,message)
+        cursor.commit()
+        cursor.close()
+        print(message)

@@ -98,7 +98,17 @@ else
 createTableCountryInfo = '''
 if((select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = 'dbo'and TABLE_NAME = 'CountryInfo') > 0)
 	begin 
-		print 'table exists already'
+		Use Company
+		drop table CountryInfo
+        
+		create table CountryInfo(
+		CountryInfoID int identity(1000,1) primary key not null,
+		CountryName varchar(50),
+		Capital varchar(50),
+		Region varchar(50),
+		Subregion varchar(50),
+		Landlocked varchar(50),
+		Currency varchar(150))
 	end
 else 
 	begin
@@ -110,9 +120,8 @@ else
 		Capital varchar(50),
 		Region varchar(50),
 		Subregion varchar(50),
-		Landlocked varchar(10),
-		Currency varchar(150),
-		)
+		Landlocked varchar(50),
+		Currency varchar(150))
 	end
 '''
 
