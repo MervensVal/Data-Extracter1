@@ -28,7 +28,7 @@ except Exception as e:
     sys.exit()
 else:
     def save_Employee_Data():
-        with open (secret.rootPath+'/DataExtracter/EmployeeImport/DataToImport.csv','r') as f:
+        with open (secret.rootPath+'/Data-Extracter1/EmployeeImport/DataToImport.csv','r') as f:
             reader = csv.reader(f)
             columns = next(reader)
             query = q.Insert_Employee_Data.format(','.join(columns),','.join('?'*len(columns)))
@@ -50,7 +50,7 @@ else:
     def Get_Statistics_DB():
         cursor = conn.cursor()
         cursor.execute(q.Get_Statistics1)
-        with open(secret.rootPath+'/DataExtracter/Report/'+
+        with open(secret.rootPath+'/Data-Extracter1/Report/'+
                   'Report_DB'+'_'+now.replace('/','-')+'.csv','w',newline='') as csvFile:
             csv_writer = csv.writer(csvFile)
             csv_writer.writerow([i[0] for i in cursor.description]) #write headers
@@ -63,7 +63,11 @@ else:
     
     def InsertCountryInfo():
         cursor = conn.cursor()
+        cursor.execute(q.createInsertCountry)
         cursor.execute(q.createTableCountryInfo)
+        cursor.commit()
+        cursor.close()
+        cursor = conn.cursor()
         query =  'select CountryName from Country order by CountryName asc'
         cursor.execute(query)
         result = cursor.fetchall()
@@ -85,3 +89,37 @@ else:
         cursor.commit()
         cursor.close()
         print(message)
+
+    def Get_Country_Statistics():
+        with open(secret.rootPath+'/Data-Extracter1/Report/'+'Country_GeneralReport'+'_'
+                  +now.replace('/','-')+'.csv','w',newline='')as csvFile1:
+            cursor=conn.cursor()
+            cursor.execute(q.getCountyData1)
+            csv_writer = csv.writer(csvFile1)
+            csv_writer.writerow([i[0] for i in cursor.description]) #write headers
+            csv_writer.writerows(cursor)
+            status = 'Success'
+            message = 'Country report created'
+            cursor.execute("insert into LogData values(?,?,GETDATE())",status,message)
+            cursor.commit()
+            cursor.close()
+            fw.Save_Log_To_File('Success','Country report created',now)
+            print('Country report created')
+        
+    def Get_CountryRevenue_Statistics():
+        with open(secret.rootPath+'/Data-Extracter1/Report/'+'CountryRevenueReport'+'_'
+                  +now.replace('/','-')+'.csv','w',newline='')as csvFile1:
+            cursor=conn.cursor()
+            cursor.execute(q.totalRevenueSubRegion)
+            csv_writer = csv.writer(csvFile1)
+            csv_writer.writerow([i[0] for i in cursor.description]) #write headers
+            csv_writer.writerows(cursor)
+            status = 'Success'
+            message = 'Country revenue created'
+            cursor.execute("insert into LogData values(?,?,GETDATE())",status,message)
+            cursor.commit()
+            cursor.close()
+            fw.Save_Log_To_File('Success','Country revenue report created',now)
+            print('Country general report created')
+
+

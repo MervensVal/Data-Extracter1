@@ -129,3 +129,28 @@ insertCountryInfo = '''
 insert into CountryInfo
 values(?,?,?,?,?,?)
 '''
+
+getCountyData1 = '''
+select 
+c.CountryName as Country,
+ci.Capital,
+ci.Region,
+ci.Subregion,
+substring(ci.Currency,3,3) as Currency,
+ci.Landlocked,
+c.YearlyRevenue
+from Country c
+join CountryInfo ci 
+on c.CountryName = ci.CountryName
+order by c.YearlyRevenue desc
+'''
+
+totalRevenueSubRegion = '''
+select 
+ci.Subregion,sum(c.YearlyRevenue) as TotalRevenue
+from Country c
+join CountryInfo ci 
+on c.CountryName = ci.CountryName
+group by ci.Subregion
+order by  TotalRevenue desc
+'''
