@@ -19,7 +19,8 @@ else
 			State varchar(40) not null,
 			StreetAddress varchar(100) not null,
 			JobTitle varchar(100) not null,
-			Salary int not null
+			Salary int not null,
+            CitizenshipCountryID int not null 
 		)
 end
 '''
@@ -32,7 +33,7 @@ values({1})
 #2nd method for inserting data
 Insert_Employee_Data2 = '''
 insert into Employee
-values(?,?,?,?,?,?,?,?,?,?,?)
+values(?,?,?,?,?,?,?,?,?,?,?,?)
 '''
 
 Create_LogData_Table = '''
@@ -153,4 +154,33 @@ join CountryInfo ci
 on c.CountryName = ci.CountryName
 group by ci.Subregion
 order by  TotalRevenue desc
+'''
+
+carOwnershipReport = '''
+select top 20 percent
+emp.FirstName, 
+emp.LastName, 
+emp.Email,
+isnull((select (replace(Email,Email,'YES')) 
+from Employee where lower(Email) like'%gov%' 
+and EmployeeID = emp.EmployeeID), 'No') as 'Gov Email',
+emp.Gender,
+emp.State,
+emp.Salary,
+replace(
+c.CountryName,'United States of America','United States'
+) as 'Country of Citizenship',
+ci.Subregion as 'Citizenship Subregion',
+cc.CarMake,
+cc.CarModel,
+cc.CarModelYear,
+isnull((case when cc.CarModelYear < 2000 
+then 'Older than 2000' end),'-') Note
+from Employee emp
+left join CompanyCars cc on cc.OwnerID = emp.EmployeeID
+join Country c on 
+emp.CitizenshipCountryID = c.CountryID
+join CountryInfo ci on lower(c.CountryName) = lower(ci.CountryName)
+where emp.Gender is not null and emp.Gender != ''
+order by emp.Salary desc,ci.Region
 '''
