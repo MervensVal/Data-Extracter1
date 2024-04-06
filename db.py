@@ -79,13 +79,12 @@ else:
             region = (str(data[0]['region']).replace("['","")).replace("']","")
             subregion = (str(data[0]['subregion']).replace("['","")).replace("']","")
             landlocked = (str(data[0]['landlocked']).replace("['","")).replace("']","")
-            currency = (str(data[0]['currencies']))#.replace("{","").replace(":","").replace("'","").replace(",","").replace("}","")
+            currency = (str(data[0]['currencies']))
             list = [country,capital,region,subregion,landlocked,currency]
             cursor.execute('insert into CountryInfo values (?,?,?,?,?,?)',(list))
-            cursor.commit()
-        status = 'Success'
-        message = 'Latest country data inserted'
-        cursor.execute("insert into LogData values (?,?,GETDATE())",status,message)
+            status = 'Success'
+            message = 'Latest country [' + country + '] data inserted'
+            cursor.execute("insert into LogData values (?,?,GETDATE())",status,message)
         cursor.commit()
         cursor.close()
         print(message)
@@ -94,7 +93,7 @@ else:
         with open(secret.rootPath+'/Data-Extracter1/Report/'+'Country_GeneralReport'+'_'
                   +now.replace('/','-')+'.csv','w',newline='')as csvFile1:
             cursor=conn.cursor()
-            cursor.execute(q.getCountyData1)
+            cursor.execute(q.getCountryData1)
             csv_writer = csv.writer(csvFile1)
             csv_writer.writerow([i[0] for i in cursor.description]) #write headers
             csv_writer.writerows(cursor)

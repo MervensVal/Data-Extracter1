@@ -131,18 +131,23 @@ insert into CountryInfo
 values(?,?,?,?,?,?)
 '''
 
-getCountyData1 = '''
-select 
+getCountryData1 = '''
+select distinct
 c.CountryName as Country,
 ci.Capital,
-ci.Region,
-ci.Subregion,
 substring(ci.Currency,3,3) as Currency,
 ci.Landlocked,
-c.YearlyRevenue
+c.YearlyRevenue,
+(select count(EmployeeID) from Employee 
+where CitizenshipCountryID = e.CitizenshipCountryID
+) as NumberOfCitizens,
+ci.Region,
+ci.Subregion,
+l.Timestamp as LastUpdatedDate
 from Country c
-join CountryInfo ci 
-on c.CountryName = ci.CountryName
+join CountryInfo ci on c.CountryName = ci.CountryName 
+join Employee e on e.CitizenshipCountryID = c.CountryID
+join LogData l on l.Message like concat('%',c.CountryName,'%')
 order by c.YearlyRevenue desc
 '''
 
@@ -161,8 +166,8 @@ select top 20 percent
 emp.FirstName, 
 emp.LastName, 
 emp.Email,
-isnull((select (replace(Email,Email,'YES')) 
-from Employee where lower(Email) like'%gov%' 
+isnull((select (replace(Email,Email,'Yes')) 
+from Employee where lower(Email) like'%.gov' 
 and EmployeeID = emp.EmployeeID), 'No') as 'Gov Email',
 emp.Gender,
 emp.State,
@@ -175,7 +180,7 @@ cc.CarMake,
 cc.CarModel,
 cc.CarModelYear,
 isnull((case when cc.CarModelYear < 2000 
-then 'Older than 2000' end),'-') Note
+then 'Car older than 2000' end),'-') Note
 from Employee emp
 left join CompanyCars cc on cc.OwnerID = emp.EmployeeID
 join Country c on 
