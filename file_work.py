@@ -19,7 +19,7 @@ try:
         f.write('\n'+status +'|' + message + '|' + now + '|' + '(end)')
         f.close
 
-    def Get_Statistics():
+    def GetRevenueSubRegion2():
         path = secret.rootPath+'/Data-Extracter1/EmployeeImport/DataToImport.csv'
         df = pd.read_csv(path)
         min_salary = df['Salary'].min()
@@ -27,20 +27,19 @@ try:
         sum_salary = df['Salary'].sum()
         num_records = df['Salary'].count()
         avg_salary = sum_salary/num_records
-        dict = [{'MinSalary':min_salary},
-            {'MaxSalary':max_salary},
-            {'AverageSalary':avg_salary},
-            {'NumberOfRecords':num_records}]
+        dict = [{'MinSalary':min_salary,'MaxSalary':max_salary,'AverageSalary':avg_salary,'NumberOfRecords':num_records}]
         today = date.today()
         now = today.strftime("%m/%d/%Y").replace('/','-')
         fields = ['MinSalary','MaxSalary','AverageSalary','NumberOfRecords']
-        file = secret.rootPath+'/Data-Extracter1/Report/Report2'+now+'.csv'
+        file = secret.rootPath+'/Data-Extracter1/Report/Salary_Summary_Report'+now+'.csv'
         with open(file,'w') as csvFile:
             writer = csv.DictWriter(csvFile,fieldnames=fields)
             writer.writeheader()
             writer.writerows(dict)
-        print('Report2 Created')
-        Save_Log_To_File('Success','Report2 Created',now)
+        status = 'Success'
+        message = 'Salary_Summary_Report Created'
+        Save_Log_To_File(status,message,now)
+        print(message)
     
     def Create_Report_Folder():
         directory = secret.rootPath+'/Data-Extracter1/Report'

@@ -43,23 +43,28 @@ else:
             cursor.commit()
             cursor.execute("insert into LogData values (?,?,GETDATE())",status,message)
             cursor.commit()
+            cursor.execute(q.createInsertDataCompanyCars)
+            cursor.commit()
             cursor.close()
-            print('employee records inserted')
             fw.Save_Log_To_File('Success','Records inserted into Employee table',now)
+            fw.Save_Log_To_File('Success','Records inserted into CompanyCars table',now)
+        print('employee records inserted')
             
-    def Get_Statistics_DB():
+    def GetRevenueSubRegion():
         cursor = conn.cursor()
-        cursor.execute(q.Get_Statistics1)
+        cursor.execute(q.getRevenueSubRegion)
         with open(secret.rootPath+'/Data-Extracter1/Report/'+
-                  'Report_DB'+'_'+now.replace('/','-')+'.csv','w',newline='') as csvFile:
+                  'Subregion_Revenue_Report'+'_'+now.replace('/','-')+'.csv','w',newline='') as csvFile:
             csv_writer = csv.writer(csvFile)
             csv_writer.writerow([i[0] for i in cursor.description]) #write headers
             csv_writer.writerows(cursor)
             cursor.execute("insert into LogData values (?,?,GETDATE())",'Success','Report Created')
             cursor.commit()
             cursor.close()
-            print('Report1 Created')
-            fw.Save_Log_To_File('Success','Report1 Created',now)            
+            status = 'Success'
+            message = 'Subregion_Revenue_Report Created'
+            fw.Save_Log_To_File(status,message,now)    
+        print('Subregion_Revenue_Report Created')        
     
     def InsertCountryInfo():
         cursor = conn.cursor()
@@ -87,29 +92,29 @@ else:
             cursor.execute("insert into LogData values (?,?,GETDATE())",status,message)
         cursor.commit()
         cursor.close()
-        print(message)
+        print('Country data inserted')
 
     def Get_Country_Statistics():
-        with open(secret.rootPath+'/Data-Extracter1/Report/'+'Country_GeneralReport'+'_'
+        with open(secret.rootPath+'/Data-Extracter1/Report/'+'Country_General_Report'+'_'
                   +now.replace('/','-')+'.csv','w',newline='')as csvFile1:
             cursor=conn.cursor()
-            cursor.execute(q.getCountryData1)
+            cursor.execute(q.getCountryData)
             csv_writer = csv.writer(csvFile1)
             csv_writer.writerow([i[0] for i in cursor.description]) #write headers
             csv_writer.writerows(cursor)
             status = 'Success'
-            message = 'Country report created'
+            message = 'Country_General_Report created'
             cursor.execute("insert into LogData values(?,?,GETDATE())",status,message)
             cursor.commit()
             cursor.close()
-            fw.Save_Log_To_File('Success','Country report created',now)
-            print('Country report created')
+            fw.Save_Log_To_File(status,message,now)
+        print('Country_General_Report created')
         
     def Get_CountryRevenue_Statistics():
         with open(secret.rootPath+'/Data-Extracter1/Report/'+'CountryRevenueReport'+'_'
                   +now.replace('/','-')+'.csv','w',newline='')as csvFile1:
             cursor=conn.cursor()
-            cursor.execute(q.totalRevenueSubRegion)
+            cursor.execute(q.getRevenueSubRegion)
             csv_writer = csv.writer(csvFile1)
             csv_writer.writerow([i[0] for i in cursor.description]) #write headers
             csv_writer.writerows(cursor)
@@ -118,7 +123,23 @@ else:
             cursor.execute("insert into LogData values(?,?,GETDATE())",status,message)
             cursor.commit()
             cursor.close()
-            fw.Save_Log_To_File('Success','Country revenue report created',now)
-            print('Country general report created')
+            fw.Save_Log_To_File('Success',message,now)
+        print('Country general report created')
+        
+    def Get_carOwnership_Statistics():
+        with open(secret.rootPath+'/Data-Extracter1/Report/'+'CarOwnershipReport'+'_'
+                  +now.replace('/','-')+'.csv','w',newline='')as csvFile1:
+            cursor=conn.cursor()
+            cursor.execute(q.getCarOwnershipData)
+            csv_writer = csv.writer(csvFile1)
+            csv_writer.writerow([i[0] for i in cursor.description]) #write headers
+            csv_writer.writerows(cursor)
+            status = 'Success'
+            message = 'Car Ownership Report created'
+            cursor.execute("insert into LogData values(?,?,GETDATE())",status,message)
+            cursor.commit()
+            cursor.close()
+            fw.Save_Log_To_File('Success',message,now)
+        print('Country general report created')
 
 
