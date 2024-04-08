@@ -43,7 +43,7 @@ else:
             cursor.commit()
             cursor.execute("insert into LogData values (?,?,GETDATE())",status,message)
             cursor.commit()
-            cursor.execute(q.createInsertDataCompanyCars)
+            cursor.execute(q.createInsertDataCompanyCars) #insert company car data
             cursor.commit()
             cursor.close()
             fw.Save_Log_To_File('Success','Records inserted into Employee table',now)
@@ -110,21 +110,21 @@ else:
             fw.Save_Log_To_File(status,message,now)
         print('Country_General_Report created')
         
-    def Get_CountryRevenue_Statistics():
-        with open(secret.rootPath+'/Data-Extracter1/Report/'+'CountryRevenueReport'+'_'
+    def Get_State_Salary_Statistics():
+        with open(secret.rootPath+'/Data-Extracter1/Report/'+'State_Salary_Report'+'_'
                   +now.replace('/','-')+'.csv','w',newline='')as csvFile1:
             cursor=conn.cursor()
-            cursor.execute(q.getRevenueSubRegion)
+            cursor.execute(q.getStateSalaryInfo)
             csv_writer = csv.writer(csvFile1)
             csv_writer.writerow([i[0] for i in cursor.description]) #write headers
             csv_writer.writerows(cursor)
             status = 'Success'
-            message = 'Country revenue created'
+            message = 'Employee salary report created'
             cursor.execute("insert into LogData values(?,?,GETDATE())",status,message)
             cursor.commit()
             cursor.close()
             fw.Save_Log_To_File('Success',message,now)
-        print('Country general report created')
+        print('Employee salary report created')
         
     def Get_carOwnership_Statistics():
         with open(secret.rootPath+'/Data-Extracter1/Report/'+'CarOwnershipReport'+'_'

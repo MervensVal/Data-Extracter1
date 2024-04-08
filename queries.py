@@ -60,12 +60,6 @@ insert into LogData
 values(?,?,?)
 '''
 
-getEmployeeSalaryInfo = '''
-select Count(EmployeeID) as Number_Of_Employees, Avg(salary) as Average_Salary,
-Max(Salary) as Highest_Salary, Min(Salary) as Lowest_Salary, 
-State from Employee group by State order by State asc
-'''
-
 createInsertCountry = '''
 if((select count(*) from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA = 'dbo'and TABLE_NAME = 'Country') > 0)
 	begin 
@@ -121,6 +115,16 @@ else
 insertCountryInfo = '''
 insert into CountryInfo
 values(?,?,?,?,?,?)
+'''
+
+getStateSalaryInfo = '''
+select 
+Count(EmployeeID) as Number_Of_Employees, 
+Avg(salary) as Average_Salary,
+Max(Salary) as Highest_Salary, 
+Min(Salary) as Lowest_Salary, 
+State from Employee group by State 
+order by State asc
 '''
 
 getCountryData = '''

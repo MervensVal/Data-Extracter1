@@ -9,7 +9,7 @@ try:
     db.InsertCountryInfo()
     db.GetRevenueSubRegion()
     db.Get_Country_Statistics()
-    db.Get_CountryRevenue_Statistics()
+    db.Get_State_Salary_Statistics()
     db.Get_carOwnership_Statistics()
     print('Program Finished')
 except Exception as e:
