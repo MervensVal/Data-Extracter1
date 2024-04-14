@@ -139,12 +139,12 @@ where CitizenshipCountryID = e.CitizenshipCountryID
 ) as NumberOfCitizens,
 ci.Region,
 ci.Subregion,
-l.Timestamp as LastUpdatedDate
+convert(varchar,cast(l.Timestamp as date),9) as LastUpdatedDate
 from Country c
 join CountryInfo ci on c.CountryName = ci.CountryName 
 join Employee e on e.CitizenshipCountryID = c.CountryID
 join LogData l on l.Message like concat('%',c.CountryName,'%')
-order by c.YearlyRevenue desc
+order by LastUpdatedDate desc, c.YearlyRevenue desc
 '''
 
 getRevenueSubRegion = '''
